@@ -18,7 +18,9 @@ class ProjectListCreateView(View):
         data = json.loads(request.body)
         form = ProjectForm(data)
         if form.is_valid():
-            project = form.save()
+            project = form.save(commit=False)
+            project.owner_id = request.user.id
+            project.save()
             return JsonResponse(model_to_dict(project), status=201)
         return JsonResponse(form.errors, status=400)
 

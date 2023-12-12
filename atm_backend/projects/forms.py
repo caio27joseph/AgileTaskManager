@@ -12,6 +12,7 @@ class ProjectForm(forms.ModelForm):
             "start_date",
             "end_date",
         ]
+        exclude = ["owner"]
         widgets = {
             "end_date": forms.DateInput(attrs={"type": "date", "class": "date-input"}),
             "start_date": forms.DateInput(attrs={"type": "date", "class": "date-input"}),

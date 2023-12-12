@@ -12,9 +12,14 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 
 from pathlib import Path
 
+import os
+from dotenv import load_dotenv
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+# Load environment variables from .env file
+load_dotenv()
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
@@ -75,8 +80,12 @@ WSGI_APPLICATION = 'atm_backend.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': os.getenv('DATABASE_ENGINE', 'django.db.backends.postgresql'),  # Default to PostgreSQL
+        'NAME': os.getenv('DATABASE_NAME', 'postgres'),  # Default database name
+        'USER': os.getenv('DATABASE_USER', 'postgres'),  # Default database user
+        'PASSWORD': os.getenv('DATABASE_PASSWORD', 'postgres'),  # Default database password
+        'HOST': os.getenv('DATABASE_HOST', 'localhost'),  # Default host
+        'PORT': os.getenv('DATABASE_PORT', '5432'),  # Default port for PostgreSQL
     }
 }
 

@@ -42,6 +42,8 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "rest_framework",
+    "rest_framework.authtoken",
     "authapp",
     "projects",
 ]
@@ -82,7 +84,9 @@ WSGI_APPLICATION = "atm_backend.wsgi.application"
 
 DATABASES = {
     "default": {
-        "ENGINE": os.getenv("DATABASE_ENGINE", "django.db.backends.postgresql"),  # Default to PostgreSQL
+        "ENGINE": os.getenv(
+            "DATABASE_ENGINE", "django.db.backends.postgresql"
+        ),  # Default to PostgreSQL
         "NAME": os.getenv("DATABASE_NAME", "postgres"),  # Default database name
         "USER": os.getenv("DATABASE_USER", "postgres"),  # Default database user
         "PASSWORD": os.getenv("DATABASE_PASSWORD", "postgres"),  # Default database password
@@ -141,3 +145,9 @@ LOGOUT_REDIRECT_URL = "/login/"
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 
 AUTH_USER_MODEL = "authapp.CommonUser"
+
+REST_FRAMEWORK = {
+    "DEFAULT_AUTHENTICATION_CLASSES": [
+        "rest_framework.authentication.TokenAuthentication",
+    ]
+}

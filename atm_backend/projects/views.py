@@ -1,32 +1,35 @@
-from django.http import JsonResponse, HttpResponse
-from django.views import View
+from django.http import HttpResponse
 from .models import Project
+
+from rest_framework.response import Response
 from .forms import ProjectForm
 import json
 from django.forms.models import model_to_dict
-from django.views.decorators.csrf import csrf_exempt
-from django.utils.decorators import method_decorator
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.views import APIView
 
 
-@method_decorator(csrf_exempt, name="dispatch")
-class ProjectListCreateView(View):
+class ProjectListCreateView(APIView):
+    permission_classes = [IsAuthenticated]
+
     def get(self, request, *args, **kwargs):
         projects = Project.objects.all().values()
-        return JsonResponse(list(projects), safe=False)
+        return Response(list(projects))
 
     def post(self, request, *args, **kwargs):
-        data = json.loads(request.body)
+        data = json.loads(request.data)
         form = ProjectForm(data)
         if form.is_valid():
             project = form.save(commit=False)
             project.owner_id = request.user.id
             project.save()
-            return JsonResponse(model_to_dict(project), status=201)
-        return JsonResponse(form.errors, status=400)
+            return Response(model_to_dict(project), status=201)
+        return Response(form.errors, status=400)
 
 
-@method_decorator(csrf_exempt, name="dispatch")
-class ProjectRetrieveUpdateDeleteView(View):
+class ProjectRetrieveUpdateDeleteView(APIView):
+    permission_classes = [IsAuthenticated]
+
     def get_object(self, pk):
         try:
             return Project.objects.get(pk=pk)
@@ -37,7 +40,7 @@ class ProjectRetrieveUpdateDeleteView(View):
         project = self.get_object(pk)
         if project is None:
             return HttpResponse(status=404)
-        return JsonResponse(model_to_dict(project))
+        return Response(model_to_dict(project))
 
     def put(self, request, pk, *args, **kwargs):
         project = self.get_object(pk)
@@ -47,8 +50,8 @@ class ProjectRetrieveUpdateDeleteView(View):
         form = ProjectForm(data, instance=project)
         if form.is_valid():
             project = form.save()
-            return JsonResponse(model_to_dict(project))
-        return JsonResponse(form.errors, status=400)
+            return Response(model_to_dict(project))
+        return Response(form.errors, status=400)
 
     def delete(self, request, pk, *args, **kwargs):
         project = self.get_object(pk)

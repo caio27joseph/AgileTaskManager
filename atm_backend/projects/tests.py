@@ -38,14 +38,12 @@ class ProjectCRUDTestCase(TestCase):
     def test_project_create(self):
         response = self.client.post(
             self.list_create_url,
-            json.dumps(
-                {
-                    "name": "New Project",
-                    "description": "New Description",
-                    "start_date": "2022-01-01",
-                    "end_date": "2022-12-31",
-                }
-            ),
+            {
+                "name": "New Project",
+                "description": "New Description",
+                "start_date": "2022-01-01",
+                "end_date": "2022-12-31",
+            },
             format="json",
         )
 

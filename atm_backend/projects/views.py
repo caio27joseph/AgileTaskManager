@@ -1,5 +1,3 @@
-import json
-
 from django.forms.models import model_to_dict
 from django.http import HttpResponse
 from rest_framework import status
@@ -71,7 +69,7 @@ class TaskListCreateView(APIView):
     def post(self, request):
         serializer = TaskSerializer(data=request.data)
         if serializer.is_valid():
-            serializer.save(owner=request.user)  # Setting the owner to the current user
+            serializer.save()  # Setting the owner to the current user
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -95,12 +93,11 @@ class TaskRetrieveUpdateDeleteView(APIView):
         task = self.get_object(pk)
         if task is None:
             return HttpResponse(status=404)
-        data = json.loads(request.body)
-        form = TaskSerializer(data, instance=task)
-        if form.is_valid():
-            task = form.save()
+        serializer = TaskSerializer(task, data=request.data)
+        if serializer.is_valid():
+            task = serializer.save()
             return Response(model_to_dict(task))
-        return Response(form.errors, status=400)
+        return Response(serializer.errors, status=400)
 
     def delete(self, request, pk, *args, **kwargs):
         task = self.get_object(pk)

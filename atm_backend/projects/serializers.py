@@ -30,3 +30,8 @@ class TaskSerializer(serializers.ModelSerializer):
     class Meta:
         model = Task
         fields = ["id", "title", "description", "status", "assigned_to", "due_date", "project"]
+
+    def validate_project(self, value):
+        if self.instance and value != self.instance.project:
+            raise serializers.ValidationError("The project cannot be modified after creation.")
+        return value

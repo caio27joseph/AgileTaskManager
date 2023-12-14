@@ -13,7 +13,7 @@ function loadContent(url, push = true) {
         }
         // Dynamically import and execute the JavaScript module for the page
         const moduleName = url.split("/").pop().replace(".html", "");
-        import(`/js/${moduleName}.js`)
+        import(`/js/pages/${moduleName}.js`)
           .then((module) => (module.load ? module.load() : null))
           .catch((err) =>
             console.error(`Failed to load script for ${moduleName}:`, err)

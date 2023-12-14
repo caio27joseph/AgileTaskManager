@@ -1,0 +1,43 @@
+/* global.css */
+
+/* Reset margin and padding */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Set a default font */
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f4f4f4;
+  color: #333;
+}
+
+/* Style headings */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-weight: normal;
+  margin-bottom: 1em;
+}
+
+/* Style links */
+a {
+  color: #0275d8;
+  text-decoration: none;
+}
+
+/* Style buttons */
+button {
+  background-color: #0275d8;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+}
+
+/* Add more styles as needed... */
